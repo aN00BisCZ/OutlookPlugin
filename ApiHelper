@@ -23,3 +23,17 @@ public static async Task<string> SendData(string subject, string body, string se
         }
     }
 }
+public static void SendMailData()
+{
+    var outlookApp = new Outlook.Application();
+    var selectedItems = outlookApp.ActiveExplorer().Selection;
+
+    foreach (Outlook.MailItem mailItem in selectedItems)
+    {
+        var subject = mailItem.Subject;
+        var body = mailItem.Body;
+        var sender = mailItem.SenderEmailAddress;
+
+        ApiHelper.SendData(subject, body, sender);
+    }
+}
