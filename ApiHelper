@@ -1,0 +1,25 @@
+public static async Task<string> SendData(string subject, string body, string sender)
+{
+    using (var httpClient = new HttpClient())
+    {
+        var data = new Dictionary<string, string>
+        {
+            { "subject", subject },
+            { "body", body },
+            { "sender", sender }
+        };
+
+        var content = new FormUrlEncodedContent(data);
+        var response = await httpClient.PostAsync("https://afm.atalian.cz/api/v1/util/custaction/30e88e0c-80e1-4d0f-8f8b-9cc8beeab22b/340881", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return responseContent;
+        }
+        else
+        {
+            throw new Exception($"Failed to send data: {response.StatusCode}");
+        }
+    }
+}
